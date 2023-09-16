@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,56 +13,72 @@
             margin: 0;
             padding: 0;
         }
+
         header {
             background-color: #000;
             text-align: center;
             padding: 20px;
         }
+
         h1 {
             font-size: 24px;
         }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
+
         p {
             line-height: 1.6;
         }
+
         a {
             text-decoration: none;
-            color: #0078d4;
+            color: #7bc7fa;
         }
+
         a:hover {
             color: #004c87;
         }
+
         .social-links {
             text-align: center;
             margin-top: 20px;
         }
+
         .social-links a {
             margin: 10px;
             font-size: 18px;
         }
-  
+
+        .projects li {
+            margin-bottom: 10px;
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+        }
+
         .articles li {
             margin-bottom: 10px;
             list-style: none;
             position: relative;
-            padding-left: 20px; 
+            padding-left: 20px;
         }
 
         .articles li:before {
-            content: "-"; 
-            color: #0078d4; 
+            content: "-";
+            color: #0078d4;
             font-weight: bold;
             display: inline-block;
             width: 1em;
             position: absolute;
             left: 0;
-         }
+        }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Vadim Inshakov</h1>
@@ -74,12 +91,61 @@
     </header>
     <div class="container">
         <p>A technology enthusiast, interested in crafting high-quality code and building robust systems</p>
-        
-        <h2>Publications</h2>
-        <ul class="articles">
-            <li><a href="https://medium.com/stackademic/writing-a-partitioned-cache-using-go-map-x3-faster-than-the-standard-map-dbfe704fe4bf">Writing a Partitioned Cache Using Go Map (x3 Faster than the Standard Map)</a></li>
-            <li><a href="https://medium.com/@vadiminshakov/fabex-tutorial-an-introduction-to-the-right-hyperledger-fabric-explorer-cd9ee1848cd9">FabEx tutorial: an introduction to the right Hyperledger Fabric explorer</a></li>
+        <ul class="projects">
+            <h2>Projects</h2>
+            <li>
+                <a href="https://github.com/vadiminshakov/committer">Committer</a>
+                </br>2PC and 3PC protocols implementation in Golang.
+                </br>Mentioned in paper <a
+                    href="https://www.comp.nus.edu.sg/~andreeac/pdf/ChoreographicPlusCal.pdf">Protocol Conformance with
+                    Choreographic PlusCal</a>
+            </li>
+            <li>
+                <a href="https://github.com/hyperledger-labs/fabex">Fabex</a>
+                </br> Hyperledger Fabric explorer. Now development stopped.
+            </li>
+            <li>
+                <a href="https://github.com/vadiminshakov/partmap">Partmap</a>
+                </br>Partitioned map implementation in Golang.
+            </li>
+            <li>
+                <a href="https://github.com/vadiminshakov/marti">Marti</a>
+                </br>Trading bot.
+            </li>
         </ul>
+
+        <ul class="articles">
+            <h2>Publications</h2>
+            <ul class="articles">
+                <li><a
+                        href="https://medium.com/stackademic/golang-design-generics-vs-interfaces-how-it-really-works-under-the-hood-c1e5057a7ae6">Golang
+                        design: Generics vs Interfaces, How it Really works under the hood</a></li>
+                <li><a
+                        href="https://medium.com/stackademic/go-when-pointers-reduce-the-impact-of-cpu-caching-1e290fc30077">Go:
+                        when pointers hide the benefits of CPU caching</a></li>
+                <li><a
+                        href="https://medium.com/stackademic/clean-code-fundamentals-eliminating-if-else-hell-using-functions-a3ed32d69732">Clean
+                        Code Fundamentals: Eliminating if/else hell using functions</a></li>
+                <li><a
+                        href="https://medium.com/stackademic/writing-a-partitioned-cache-using-go-map-x3-faster-than-the-standard-map-dbfe704fe4bf">Writing
+                        a Partitioned Cache Using Go Map (x3 Faster than the Standard Map)</a></li>
+
+                <li><a
+                        href="https://medium.com/@vadiminshakov/fabex-tutorial-an-introduction-to-the-right-hyperledger-fabric-explorer-cd9ee1848cd9">FabEx
+                        tutorial: an introduction to the right Hyperledger Fabric explorer</a></li>
+
+
+                <li><a href="https://habr.com/ru/articles/496872/">Новая программная модель Hyperledger Fabric: Go
+                        SDK</a></li>
+                <li><a href="https://habr.com/ru/articles/494880/">Новая программная модель чейнкода Hyperledger
+                        Fabric</a></li>
+                <li><a href="https://habr.com/ru/articles/489002/">Распределенный реестр для колесных пар: опыт с
+                        Hyperledger Fabric</a></li>
+                <li><a href="https://habr.com/ru/articles/501422/">FabEx — block explorer для Hyperledger Fabric</a>
+                </li>
+
+            </ul>
     </div>
 </body>
+
 </html>
