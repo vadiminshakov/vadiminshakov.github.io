@@ -43,14 +43,23 @@
             margin: 10px;
             font-size: 18px;
         }
-        .articles {
-            margin-top: 40px;
-            list-style-type: none;
-            padding: 0;
-        }
+  
         .articles li {
             margin-bottom: 10px;
+            list-style: none;
+            position: relative;
+            padding-left: 20px; 
         }
+
+        .articles li:before {
+            content: "-"; 
+            color: #0078d4; 
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            position: absolute;
+            left: 0;
+         }
     </style>
 </head>
 <body>
