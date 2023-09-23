@@ -78,6 +78,51 @@
             position: absolute;
             left: 0;
         }
+
+        .company-links {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        .company-links li {
+            display: inline;
+            margin: 0 10px;
+            /* Расстояние между ссылками */
+        }
+
+        .company-links a {
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            /* Используем моноширинный шрифт */
+            font-size: 16px;
+            /* Размер шрифта */
+            color: #75ffed;
+            /* Цвет текста ссылки */
+            background-color: #000;
+            /* Цвет фона ссылки */
+            padding: 5px 10px;
+            /* Внутренний отступ текста внутри ссылки */
+            border: 1px solid #7bc7fa;
+            /* Граница ссылки */
+            border-radius: 4px;
+            /* Скругление углов */
+        }
+
+        .company-links li:before {
+            content: "";
+        }
+
+        .company-links a:hover {
+            color: #fff;
+            /* Изменение цвета текста при наведении */
+            background-color: #7bc7fa;
+            /* Изменение цвета фона при наведении */
+        }
+        
+        .workedfor {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -120,7 +165,8 @@
             <h2>Publications</h2>
             <ul class="articles">
                 <li><a
-                    href="https://blog.stackademic.com/deep-dive-into-go-runtime-advanced-thread-management-explained-fd5c97b4daa4">Deep Dive into Go Runtime: Advanced Thread Management Explained</a></li>
+                        href="https://blog.stackademic.com/deep-dive-into-go-runtime-advanced-thread-management-explained-fd5c97b4daa4">Deep
+                        Dive into Go Runtime: Advanced Thread Management Explained</a></li>
                 <li><a
                         href="https://medium.com/stackademic/golang-design-generics-vs-interfaces-how-it-really-works-under-the-hood-c1e5057a7ae6">Golang
                         design: Generics vs Interfaces, How it Really works under the hood</a></li>
@@ -149,6 +195,17 @@
                 </li>
 
             </ul>
+
+            <h2 class="workedfor">Worked for</h2>
+            <footer>
+                <ul class="company-links">
+                    <li><a href="https://sbermarket.ru/">sbermarket</a></li>
+                    <li><a href="https://atomyze.ru/">atomyze</a></li>
+                    <li><a href="https://vk.company/">vk</a></li>
+                    <li><a href="https://www.ocrv.ru/">rzd</a></li>
+                    <li><a href="https://www.ramax.ru/">ramax group</a></li>
+                </ul>
+            </footer>
     </div>
 </body>
 
