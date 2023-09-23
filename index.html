@@ -119,9 +119,31 @@
             background-color: #7bc7fa;
             /* Изменение цвета фона при наведении */
         }
-        
+
         .workedfor {
             text-align: center;
+        }
+
+        /* Стили для маленьких экранов */
+        @media (max-width: 600px) {
+            .workedfor {
+                text-align: left;
+                /* Изменяем выравнивание текста на левое */
+            }
+
+            .company-links {
+                text-align: center;
+                /* Изменяем выравнивание ссылок на центр для удобства */
+                padding: 0;
+                /* Убираем отступы */
+            }
+
+            .company-links li {
+                display: block;
+                /* Меняем отображение ссылок на блочное */
+                margin: 10px 0;
+                /* Увеличиваем вертикальный отступ между ссылками */
+            }
         }
     </style>
 </head>
