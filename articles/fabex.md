@@ -35,7 +35,7 @@ Run **FabEx**:
 
 It will work with test Fabric network specified in tests/config.yaml.
 
-Look at ***-task=grpc ***parameter. This parameter means that FabEx will work as a service with gRPC interface. It will parse blockchain, specified in connection profile, save data to database and respond to RPC queries. But FabEx can work without gRPC interface exposed. It can work in CLI mode. You can instruct FabEx to just parse the blockchain, add data to the database and do nothing else:
+Look at _-task=grpc_ parameter. This parameter means that FabEx will work as a service with gRPC interface. It will parse blockchain, specified in connection profile, save data to database and respond to RPC queries. But FabEx can work without gRPC interface exposed. It can work in CLI mode. You can instruct FabEx to just parse the blockchain, add data to the database and do nothing else:
 
 go run fabex.go -task=explore -configpath=tests -configname=config -enrolluser=true -db=cassandra
 
