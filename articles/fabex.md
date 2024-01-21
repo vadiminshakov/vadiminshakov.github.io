@@ -7,29 +7,29 @@ Here we will learn the basics of using FabEx — blockchain explorer for Hyperle
 
 Let’s start an example HLF network. First make sure you have the required Hyperledger Fabric binaries and Docker images. If not, follow the instructions [on this page](https://hyperledger-fabric.readthedocs.io/en/release-2.2/install.html). And then start network:
 
-make fabric-test
+```make fabric-test```
 
 Start CassandraDB (you can choose MongoDB instead, but here we will only consider working with СassandraDB):
 
-make cassandra
+```make cassandra```
 
 Now we can start FabEx. For this we need a configuration file. Take a look at file tests/config.yaml. As you can see, it points to ./tests/connection.yaml:
 
-connectionProfile: ./tests/connection.yaml
+```connectionProfile: ./tests/connection.yaml```
 
 It’s just a HLF connection profile prepared by me in advance. When you work with your own HLF network, just specify the path to your connection profile.
 
 Now add aliases to */etc/hosts:*
 
-sudo bash -c 'echo "127.0.0.1 org1.example.com peer0.org1.example.com peer1.org1.example.com orderer.org1.example.com ca.org1.example.com" >> /etc/hosts'
+```sudo bash -c 'echo "127.0.0.1 org1.example.com peer0.org1.example.com peer1.org1.example.com orderer.org1.example.com ca.org1.example.com" >> /etc/hosts```
 
-Then **untar vendored dependencies*:*
+Then **untar vendored dependencies**:
 
-tar xvf vendor.tar
+```tar xvf vendor.tar```
 
-Run **FabEx*:*
+Run **FabEx**:
 
-go run fabex.go -task=grpc -configpath=tests -configname=config -enrolluser=true -db=cassandra
+```go run fabex.go -task=grpc -configpath=tests -configname=config -enrolluser=true -db=cassandra```
 
 ![](https://cdn-images-1.medium.com/max/3070/1*zFUNO2bsZh6B909X7jyzVQ.png)
 
@@ -49,22 +49,25 @@ go run fabex.go -task=getblock -blocknum=1 -configpath=tests -configname=config 
 
 Get all saved data:
 
-go run fabex.go -task=getall -configpath=tests -configname=config -enrolluser=true -db=cassandra
+```go run fabex.go -task=getall -configpath=tests -configname=config -enrolluser=true -db=cassandra```
 
 Get channel info:
 
-go run fabex.go -task=channelinfo -configpath=tests -configname=config -enrolluser=true -db=cassandra
+```go run fabex.go -task=channelinfo -configpath=tests -configname=config -enrolluser=true -db=cassandra```
 
 Get channel config:
 
-go run fabex.go -task=channelconfig -configpath=tests -configname=config -enrolluser=true -db=cassandra
+```go run fabex.go -task=channelconfig -configpath=tests -configname=config -enrolluser=true -db=cassandra```
 
 Ok, back to our FabEx in gRPC mode. Now FabEx parses blockchain and saves all collected data to the CassandraDB. Let’s check it in another terminal:
 
+	
+```
 docker exec -it cassandra bash
 cqlsh
 use blocks;
 select blocknum, channelid, txid, payloadkeys from txs;
+```
 
 ![](https://cdn-images-1.medium.com/max/2304/1*8bW3GwkVUHOsuhg2Fncrag.png)
 
