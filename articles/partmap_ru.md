@@ -80,7 +80,7 @@
     //   finder     partitioner = ...
     // }
 
-И ваша функция хеширования для ключа testkeyвыдала 125, то мы найдем нужную партицию так 125%3=41 (остаток 2) , следовательно, ключ testkeyпринадлежит партиции с индексом 2 (part2).
+И ваша функция хеширования для ключа `testkey` выдала 125, то мы найдем нужную партицию так `125%3=41` (остаток 2) , следовательно, ключ testkeyпринадлежит партиции с индексом 2 (part2).
 
 Теперь мы для любого ключа можем определить партицию:
 
@@ -115,11 +115,11 @@
 
 Всё просто! Напишем бенчмарк, чтобы сравнить нашу реализацию со стандартной мапой.
 
-BenchmarckStd — бенчмарк для стандартной мапы с мьютексом.
+**BenchmarckStd** — бенчмарк для стандартной мапы с мьютексом.
 
-BenchmarkSyncStd — бенчмарк для sync.Map.
+**BenchmarkSyncStd** — бенчмарк для sync.Map.
 
-BenchmarkPartiotioned — бенчмарк партиционированной мапы.
+**BenchmarkPartiotioned** — бенчмарк партиционированной мапы.
 
     func BenchmarkStd(b *testing.B) {
        m := make(map[string]int)
@@ -185,6 +185,6 @@ BenchmarkPartiotioned — бенчмарк партиционированной 
     BenchmarkSyncStd/set_sync_map_std_concurrently-12     2408612   1691 ns/op
     BenchmarkPartitioned/set_partitioned_concurrently-12  13536134  408.6 ns/op
 
-Партиционированная мапа в **3.25** раз быстрее мапы на мьютексах и в 4.13 раз быстрее sync.Map.
+Партиционированная мапа в **3.25** раз быстрее мапы на мьютексах и в **4.13** раз быстрее sync.Map.
 
 Все исходники доступны здесь: [https://github.com/vadiminshakov/partmap](https://github.com/vadimInshakov/partmap)
