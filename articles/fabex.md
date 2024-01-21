@@ -42,7 +42,7 @@ Run FabEx_:_
 
 go run fabex.go -task=grpc -configpath=tests -configname=config -enrolluser=true -db=cassandra
 
-![](/Users/vadiminshakov/Downloads/medium-export-089ba9aeef850c38170bac7334f267b895b384bab6263df16f3c4e1dbe450357/posts/md_1705862990838/img/1__zFUNO2bsZh6B909X7jyzVQ.png)
+![](https://github.com/vadiminshakov/vadiminshakov.github.io/blob/main/articles/img/1__zFUNO2bsZh6B909X7jyzVQ.png)
 
 It will work with test Fabric network specified in tests/config.yaml.
 
