@@ -190,7 +190,3 @@ The partitioned map is **3.25** times faster than the mutex-based map and **4.13
 All source code is available here:
 
 [https://github.com/vadiminshakov/partmap](https://github.com/vadimInshakov/partmap)
-
-*You can support my work here: [**https://www.buymeacoffee.com/insh](https://www.buymeacoffee.com/insh)***
-
-*Thank you for reading until the end. Please consider following the writer and this publication. Visit [**Stackademic](https://stackademic.com/)** to find out more about how we are democratizing free programming education around the world.*
