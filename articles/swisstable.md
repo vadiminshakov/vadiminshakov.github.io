@@ -56,27 +56,40 @@ Metadata is represented by bitmasks:
 Let’s consider how a key is added to the map.
 
 1. **Hash the key**
+
    The key is hashed and split into two parts, hi and lo:
 
+   ```go 
    hi, lo := splitHash(m.hash.Hash(key))
+   ```
+
 
 2. **Determine the group**
+
    Use the hi part to determine the data group (similar to a bucket) by dividing the hash modulo the number of groups:
 
+   ```go
    g := probeStart(hi, len(m.groups))
+   ```
+   
+   Here, g is the index of the group where the key-value pair will be stored. For example, it could be group 3.
 
-Here, g is the index of the group where the key-value pair will be stored. For example, it could be group 3.
 
 3. **Find the position in the group**
    Next, metadata is used to locate the position within the group:
 
+   ```go
    matches := metaMatchH2(&m.ctrl[g], lo)
+   ```
 
-matches is a bitmask. For instance, 0b00100000 indicates that slot 2 is available for writing.
+   matches is a bitmask. For instance, 0b00100000 indicates that slot 2 is available for writing.
+
 
 4. **Insert the key-value pair**
+
    Check the keys and write the data to the corresponding position:
 
+   ```go
    for matches != 0 {     
    s := nextMatch(&matches)     
    if key == m.groups[g].keys[s] {         
@@ -85,8 +98,9 @@ matches is a bitmask. For instance, 0b00100000 indicates that slot 2 is availabl
    return     
    }
    }
+   ```
 
-In this example, the data is written to m.groups[3].keys[2] and m.groups[3].values[2].
+   In this example, the data is written to m.groups[3].keys[2] and m.groups[3].values[2].
 
 It’s fairly straightforward. The complexity lies in the highly efficient SIMD instructions used by the algorithm, which we won’t delve into here.
 
