@@ -95,25 +95,17 @@
         .company-links li {
             display: inline;
             margin: 0 10px;
-            /* Расстояние между ссылками */
         }
 
         .company-links a {
             text-decoration: none;
             font-family: 'Courier New', monospace;
-            /* Используем моноширинный шрифт */
             font-size: 16px;
-            /* Размер шрифта */
             color: #75ffed;
-            /* Цвет текста ссылки */
             background-color: #000;
-            /* Цвет фона ссылки */
             padding: 5px 10px;
-            /* Внутренний отступ текста внутри ссылки */
             border: 1px solid #7bc7fa;
-            /* Граница ссылки */
             border-radius: 4px;
-            /* Скругление углов */
         }
 
         .company-links li:before {
@@ -122,27 +114,21 @@
 
         .company-links a:hover {
             color: #fff;
-            /* Изменение цвета текста при наведении */
             background-color: #7bc7fa;
-            /* Изменение цвета фона при наведении */
         }
 
         .workedfor {
             text-align: center;
         }
 
-        /* Стили для маленьких экранов */
         @media (max-width: 600px) {
             .workedfor {
                 text-align: left;
-                /* Изменяем выравнивание текста на левое */
             }
 
             .company-links {
                 text-align: center;
-                /* Изменяем выравнивание ссылок на центр для удобства */
                 padding: 0;
-                /* Убираем отступы */
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: space-between;
@@ -150,11 +136,10 @@
 
             .company-links li {
                 flex: 0 0 calc(50% - 10px);
-                /* Два элемента в ряд с отступами */
                 margin: 10px 0;
                 box-sizing: border-box;
-                /* Учитываем отступы внутри блока */
             }
+        }
     </style>
 </head>
 
@@ -183,6 +168,10 @@
                 <a href="https://github.com/hyperledger-labs/fabex">Fabex</a>
                 </br> Hyperledger Fabric explorer. Now development stopped
             </li>
+             <li>
+                <a href="https://github.com/vadiminshakov/gowal">GoWal</a>
+                </br> A simple and fast write-ahead log implementation in Golang
+            </li>
             <li>
                 <a href="https://github.com/vadiminshakov/partmap">Partmap</a>
                 </br>Partitioned map implementation in Golang
@@ -190,6 +179,10 @@
             <li>
                 <a href="https://github.com/vadiminshakov/marti">Marti</a>
                 </br>Trading bot
+            </li>
+            <li>
+                <a href="https://github.com/vadiminshakov/autonomy">Autonomy</a>
+                </br>AI coding agent
             </li>
         </ul>
 
