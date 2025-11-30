@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #000;
+            color: #ccc;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 50px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #fff;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 20px;
+        }
+
+        a {
+            color: #7bc7fa;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            background-color: #222;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #e6e6e6;
+        }
+
+        pre {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid #333;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+            border-radius: 0;
+        }
+
+        blockquote {
+            border-left: 4px solid #7bc7fa;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #111;
+            color: #aaa;
+            font-style: italic;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: block;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 40px;
+            color: #7bc7fa;
+            font-size: 14px;
+            border: 1px solid #7bc7fa;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background-color: #7bc7fa;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .loading {
+            text-align: center;
+            margin-top: 50px;
+            color: #777;
+        }
+
+        .error {
+            color: #ff6b6b;
+            text-align: center;
+            margin-top: 50px;
+            border: 1px solid #ff6b6b;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="archive.html" class="back-link">← Back to Archive</a>
+        <div id="content">
+            <div class="loading">Loading article...</div>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const post = params.get('post');
+
+        if (post) {
+            let fetchUrl = `articles/${post}.md`;
+            if (window.location.protocol === 'file:') {
+                fetchUrl = `https://raw.githubusercontent.com/vadiminshakov/vadiminshakov.github.io/main/articles/${post}.md`;
+            }
+
+            fetch(fetchUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error(`Failed to load article (${response.status})`);
+                    return response.text();
+                })
+                .then(text => {
+                    // Remove frontmatter (YAML between --- and ---)
+                    const content = text.replace(/^---[\s\S]*?---\n/, '');
+                    
+                    // Configure marked
+                    marked.setOptions({
+                        highlight: function(code, lang) {
+                            const language = highlight.getLanguage(lang) ? lang : 'plaintext';
+                            return highlight.highlight(code, { language }).value;
+                        },
+                        langPrefix: 'hljs language-'
+                    });
+
+                    document.getElementById('content').innerHTML = marked.parse(content);
+                    
+                    // Extract title from frontmatter for document title
+                    const titleMatch = text.match(/^title:\s*"(.*?)"/m);
+                    if (titleMatch) {
+                        document.title = titleMatch[1] + " - Vadim Inshakov";
+                        // Prepend title
+                        const h1 = document.createElement('h1');
+                        h1.textContent = titleMatch[1];
+                        document.getElementById('content').prepend(h1);
+                    }
+
+                    // Trigger highlight.js
+                    hljs.highlightAll();
+                })
+                .catch(err => {
+                    console.error(err);
+                    let msg = err.message;
+                    document.getElementById('content').innerHTML = `<div class="error">
+                        <h3>Error loading article</h3>
+                        <p>${msg}</p>
+                    </div>`;
+                });
+        } else {
+            document.getElementById('content').innerHTML = "<p>No article specified.</p>";
+        }
+    </script>
+</body>
+
+</html>

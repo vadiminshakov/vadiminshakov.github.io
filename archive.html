@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive - Vadim Inshakov</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 28px;
+        }
+
+        .article-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .article-item {
+            margin-bottom: 20px;
+            padding: 25px;
+            border: 1px solid #333;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: #0a0a0a;
+        }
+
+        .article-item:hover {
+            background-color: #111;
+            border-color: #7bc7fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .article-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #7bc7fa;
+        }
+
+        .article-subtitle {
+            font-size: 15px;
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .back-home {
+            display: block;
+            margin-bottom: 30px;
+            color: #7bc7fa;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-home:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="index.html" class="back-home">← Back to Home</a>
+        <h1>Archive</h1>
+        <ul class="article-list">
+            <li>
+                <a href="article.html?post=repository_registry">
+                    <div class="article-item">
+                        <div class="article-title">Design: Repository Registry and Transactions at the Service Level
+                        </div>
+                        <div class="article-subtitle">A deep dive into managing transactions across service and
+                            repository layers using a registry pattern.</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="article.html?post=go_runtime_thread_management">
+                    <div class="article-item">
+                        <div class="article-title">Deep Dive into Go Runtime: Advanced Thread Management Explained</div>
+                        <div class="article-subtitle">Unveiling the hidden aspects of thread management in Go.</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="article.html?post=generic_vs_interfaces">
+                    <div class="article-item">
+                        <div class="article-title">Golang design: Generics vs Interfaces, How It Really Works Under the
+                            Hood</div>
+                        <div class="article-subtitle">A long story in simple words about how the internals of Go work
+                            when using generics and interfaces.</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="article.html?post=coroutine">
+                    <div class="article-item">
+                        <div class="article-title">Golang design: Mechanics of Coroutines</div>
+                        <div class="article-subtitle">A step-by-step breakdown of how coroutines work in Go, explained
+                            simply.</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="article.html?post=pointers_and_cpu">
+                    <div class="article-item">
+                        <div class="article-title">Go: when pointers hide the benefits of CPU caching</div>
+                        <div class="article-subtitle">Beware of premature optimizations; understanding how pointers
+                            affect CPU caching.</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="article.html?post=clean_ifelse">
+                    <div class="article-item">
+                        <div class="article-title">Clean Code Fundamentals: Eliminating if/else hell using functions
+                        </div>
+                        <div class="article-subtitle">Techniques to simplify complex conditional logic and improve code
+                            readability.</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="article.html?post=partmap_en">
+                    <div class="article-item">
+                        <div class="article-title">Writing a Partitioned Cache Using Go Map (x3 Faster than the Standard
+                            Map)</div>
+                        <div class="article-subtitle">Optimizing concurrent map access in Go using partitioning.</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="article.html?post=partmap_ru">
+                    <div class="article-item">
+                        <div class="article-title">Пишем партиционированный кеш на go map (x3 быстрее стандартной map)
+                        </div>
+                        <div class="article-subtitle">Optimizing concurrent map access in Go using partitioning (Russian
+                            version).</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="article.html?post=gc_basics">
+                    <div class="article-item">
+                        <div class="article-title">Basics of Golang GC Explained: Tri-color Mark and Sweep and Stop the
+                            World</div>
+                        <div class="article-subtitle">Understanding the mechanics of Go's garbage collector.</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="article.html?post=swisstable">
+                    <div class="article-item">
+                        <div class="article-title">SwissTable: Structure and Benchmark</div>
+                        <div class="article-subtitle">Exploring the SwissTable hash map implementation and its
+                            performance.</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="article.html?post=fabex">
+                    <div class="article-item">
+                        <div class="article-title">FabEx tutorial: an introduction to the right Hyperledger Fabric
+                            explorer</div>
+                        <div class="article-subtitle">A guide to using FabEx for Hyperledger Fabric blockchain
+                            exploration.</div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>
