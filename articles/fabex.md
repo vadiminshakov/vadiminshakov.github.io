@@ -1,5 +1,8 @@
+---
+title: "FabEx tutorial: an introduction to the right Hyperledger Fabric explorer"
+author: "Vadim Inshakov"
+---
 
-## FabEx tutorial: an introduction to the right Hyperledger Fabric explorer
 
 ![](https://cdn-images-1.medium.com/max/2000/1*ACvm0vLGezyQqryEA-u1fg.png)
 

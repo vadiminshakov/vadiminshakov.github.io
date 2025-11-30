@@ -1,5 +1,8 @@
+---
+title: "Golang design: Generics vs Interfaces, How It Really Works Under the Hood"
+author: "Vadim Inshakov"
+---
 
-## Golang design: Generics vs Interfaces, How It Really Works Under the Hood
 >  A long story in simple words about how the internals of Go work when using generics and interfaces. Be the better engineer by making right decisions.
 
 ![](https://cdn-images-1.medium.com/max/2048/1*uT60RAQxOBNCObcd_ZRLgw.png)
@@ -12,27 +15,31 @@ The answer requires a deep dive into the Go’s design.
 
 Let’s look at two examples of polymorphism.
 
-    type counter interface {
-     Add()
-    }
+```go
+type counter interface {
+ Add()
+}
     
-    type counterImpl1 struct {
-     n int
-    }
+type counterImpl1 struct {
+ n int
+}
     
-    func (p counterImpl1) Add() {
-     p.n++
-    }
+func (p counterImpl1) Add() {
+ p.n++
+}
     
-    func add(p counter) {
-     p.Add()
-    }
+func add(p counter) {
+ p.Add()
+}
+```
 
 The function add takes counterImpl1, which satisfies the counter interface and calls its method. We can do the same thing using generics:
 
-    func addGeneric[T counter](p T) {
-     p.Add()
-    }
+```go
+func addGeneric[T counter](p T) {
+ p.Add()
+}
+```
 
 This works just like the previous example. We simply created two identical functions with a parameter that has specific methods. Is there any difference? Yes, there is.
 
@@ -46,19 +53,23 @@ Generics in Go operate based on hybrid (partial) monomorphization. What is monom
 
 Suppose you have a generic function:
 
-    func add[T int | string](x, y T) T {
-      return x + y
-    }
+```go
+func add[T int | string](x, y T) T {
+  return x + y
+}
+```
 
 When you compile this code, you’ll get something like this in the resulting binary (pseudocode):
 
-    func addInt(x, y int) int {
-      return x + y
-    }
+```go
+func addInt(x, y int) int {
+  return x + y
+}
     
-    func addString(x, y string) string {
-      return x + y
-    }
+func addString(x, y string) string {
+  return x + y
+}
+```
 
 This is monomorphization: the compiler automatically generates multiple copies of your types, functions, and methods for each usage scenario. This means zero cost for the runtime, and this is mainly how generics work in compiled languages.
 
@@ -74,64 +85,70 @@ Let’s check how both implementations work.
 
 We’ll create an interface and two functions (a regular one and a generic one) that work with this interface:
 
-    type counter interface {
-     Add()
-     Sub()
-     Multiply()
-    }
+```go
+type counter interface {
+ Add()
+ Sub()
+ Multiply()
+}
     
-    func addsubmul(p counter) {
-     p.Add()
-     p.Multiply()
-     p.Sub()
-    }
+func addsubmul(p counter) {
+ p.Add()
+ p.Multiply()
+ p.Sub()
+}
     
-    func addsubmulGeneric[T counter](p T) {
-     p.Add()
-     p.Multiply()
-     p.Sub()
-    }
+func addsubmulGeneric[T counter](p T) {
+ p.Add()
+ p.Multiply()
+ p.Sub()
+}
+```
 
 Now let’s write benchmarks:
 
-    func BenchmarkIface(b *testing.B) {
-     b.Run("ifaceByPointer", func(b *testing.B) {
-      impl1 := &counterImpl1Ptr{}
-      impl2 := &counterImpl2Ptr{}
-      for i := 0; i < b.N; i++ {
-       for j := 0; j < 100; j++ {
-        addsubmul(impl1)
-        addsubmul(impl2)
-       }
-      }
-     })
-    }
+```go
+func BenchmarkIface(b *testing.B) {
+ b.Run("ifaceByPointer", func(b *testing.B) {
+  impl1 := &counterImpl1Ptr{}
+  impl2 := &counterImpl2Ptr{}
+  for i := 0; i < b.N; i++ {
+   for j := 0; j < 100; j++ {
+    addsubmul(impl1)
+    addsubmul(impl2)
+   }
+  }
+ })
+}
     
-    func BenchmarkGeneric(b *testing.B) {
-     b.Run("genericByPointer", func(b *testing.B) {
-      impl1 := &counterImpl1Ptr{}
-      impl2 := &counterImpl2Ptr{}
-      for i := 0; i < b.N; i++ {
-       for j := 0; j < 100; j++ {
-        addsubmulGeneric[*counterImpl1Ptr](impl1)
-        addsubmulGeneric[*counterImpl2Ptr](impl2)
-       }
-      }
-     })
-    }
+func BenchmarkGeneric(b *testing.B) {
+ b.Run("genericByPointer", func(b *testing.B) {
+  impl1 := &counterImpl1Ptr{}
+  impl2 := &counterImpl2Ptr{}
+  for i := 0; i < b.N; i++ {
+   for j := 0; j < 100; j++ {
+    addsubmulGeneric[*counterImpl1Ptr](impl1)
+    addsubmulGeneric[*counterImpl2Ptr](impl2)
+   }
+  }
+ })
+}
+```
 
 *(I added an extra 100 iterations inside the benchmark loop to get more illustrative results)*
 
 The results are roughly the same, as we expected:
 
-    go test --bench=. --benchtime=10s
+```go
+go test --bench=. --benchtime=10s
     
-    goos: darwin
-    goarch: amd64
-    pkg: module05/fibonachi
-    cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
-    BenchmarkIface/ifaceByPointer-12        11261798               986.5 ns/op
-    BenchmarkGeneric/genericByPointer-12    11983582               996.4 ns/op
+goos: darwin
+goarch: amd64
+pkg: module05/fibonachi
+cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+BenchmarkIface/ifaceByPointer-12        11261798               986.5 ns/op
+BenchmarkGeneric/genericByPointer-12    11983582               996.4 ns/op
+```
 
 ### Generics are faster when passing arguments by value
 
@@ -153,10 +170,12 @@ The dictionary is passed to the AX register.
 
 This is assembly for:
 
-    func addsubmulGeneric[T counter](p T) {
-     p.Add() <--
-     ...
-    }
+```go
+func addsubmulGeneric[T counter](p T) {
+ p.Add() <--
+ ...
+}
+```
 
 And then it just repeats. For `p.Multiply()` we see this:
 
@@ -172,40 +191,42 @@ Even though we passed not a pointer but a structure by value to the generic func
 
 Benchmark:
 
-    func BenchmarkIface(b *testing.B) {
-     b.Run("ifaceByValue", func(b *testing.B) {
-      impl1 := counterImpl1{}
-      impl2 := counterImpl2{}
-      for i := 0; i < b.N; i++ {
-       for j := 0; j < 100; j++ {
-        addsubmul(impl1)
-        addsubmul(impl2)
-       }
-      }
-     })
-    }
+```go
+func BenchmarkIface(b *testing.B) {
+ b.Run("ifaceByValue", func(b *testing.B) {
+  impl1 := counterImpl1{}
+  impl2 := counterImpl2{}
+  for i := 0; i < b.N; i++ {
+   for j := 0; j < 100; j++ {
+    addsubmul(impl1)
+    addsubmul(impl2)
+   }
+  }
+ })
+}
     
-    func BenchmarkGeneric(b *testing.B) {
-     b.Run("genericByValue", func(b *testing.B) {
-      impl1 := counterImpl1{}
-      impl2 := counterImpl2{}
-      for i := 0; i < b.N; i++ {
-       for j := 0; j < 100; j++ {
-        addsubmulGeneric[counterImpl1](impl1)
-        addsubmulGeneric[counterImpl2](impl2)
-       }
-      }
-     })
-    }
+func BenchmarkGeneric(b *testing.B) {
+ b.Run("genericByValue", func(b *testing.B) {
+  impl1 := counterImpl1{}
+  impl2 := counterImpl2{}
+  for i := 0; i < b.N; i++ {
+   for j := 0; j < 100; j++ {
+    addsubmulGeneric[counterImpl1](impl1)
+    addsubmulGeneric[counterImpl2](impl2)
+   }
+  }
+ })
+}
 
-    go test --bench=. --benchtime=10s
+go test --bench=. --benchtime=10s
     
-    goos: darwin
-    goarch: amd64
-    pkg: module5
-    cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
-    BenchmarkIface/ifaceByValue-12           7997700              1382 ns/op
-    BenchmarkGeneric/genericByValue-12      13218322               933.3 ns/op
+goos: darwin
+goarch: amd64
+pkg: module5
+cpu: Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
+BenchmarkIface/ifaceByValue-12           7997700              1382 ns/op
+BenchmarkGeneric/genericByValue-12      13218322               933.3 ns/op
+```
 
 Incredibly, the generic function is faster, even though it uses the same dynamic dispatch! **The difference is 48%**.
 

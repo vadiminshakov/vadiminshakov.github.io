@@ -1,5 +1,8 @@
+---
+title: "Basics of Golang GC Explained: Tri-color Mark and Sweep and Stop the World"
+author: "Vadim Inshakov"
+---
 
-## Basics of Golang GC Explained: Tri-color Mark and Sweep and Stop the World
 
 ![](https://cdn-images-1.medium.com/max/2050/1*Uya5-_qK3mN0CuJRt_Ba_w.png)
 
@@ -63,50 +66,54 @@ The world stops only for two short periods: mark termination and sweep terminati
 
 I decided to throw together a simple test that tests two scenarios with the allocation of small objects. I disabled the garbage collector using env GOGC=off and simply trigger garbage collection at the end of each test by directly calling runtime.GC():
 
-    func Test1000Allocs(t *testing.T) {
-        go func() {
-           for {
-              i := 123
-              reader(&i)
-           }
-        }()
+```go
+func Test1000Allocs(t *testing.T) {
+    go func() {
+       for {
+          i := 123
+          reader(&i)
+       }
+    }()
     
-        for i := 0; i < 1000; i++ {
-           ii := i
-           i = *reader(&ii)
-        }
-    
-        runtime.GC()
+    for i := 0; i < 1000; i++ {
+       ii := i
+       i = *reader(&ii)
     }
     
-    func Test10000000000Allocs(t *testing.T) {
-        go func() {
-           for {
-              i := 123
-              reader(&i)
-           }
-        }()
+    runtime.GC()
+}
     
-        for i := 0; i < 10000000000; i++ {
-           ii := i
-           i = *reader(&ii)
-        }
+func Test10000000000Allocs(t *testing.T) {
+    go func() {
+       for {
+          i := 123
+          reader(&i)
+       }
+    }()
     
-        runtime.GC()
+    for i := 0; i < 10000000000; i++ {
+       ii := i
+       i = *reader(&ii)
     }
     
-    //go:noinline
-    func reader(i *int) *int {
-        ii := i
-        return ii
-    }
+    runtime.GC()
+}
+    
+//go:noinline
+func reader(i *int) *int {
+    ii := i
+    return ii
+}
+```
 
 We run each test with tracing information enabled:
 
-    GOGC=off go test -run=Test1000Allocs -trace=trace1.out
-    GOGC=off go test -run=Test10000000000Allocs -trace=trace2.out
-    go tool trace trace1.out
-    go tool trace trace2.out
+```go
+GOGC=off go test -run=Test1000Allocs -trace=trace1.out
+GOGC=off go test -run=Test10000000000Allocs -trace=trace2.out
+go tool trace trace1.out
+go tool trace trace2.out
+```
 
 ![Test1000Allocs](https://cdn-images-1.medium.com/max/6016/1*LgKvFfLLlwukRNbopA3u7A.png)
 

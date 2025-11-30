@@ -1,5 +1,8 @@
+---
+title: "Golang design: Mechanics of Coroutines"
+author: "Vadim Inshakov"
+---
 
-## Golang design: Mechanics of Coroutines
 
 ![](https://cdn-images-1.medium.com/max/2088/1*5_sw6i26kK7Js2Ag1HjLGw.png)
 >  A step-by-step breakdown of how coroutines work in Go, explained simply
@@ -10,26 +13,28 @@ We’ll look at a basic version without cancellations or panic handling mechanis
 
 Here’s the coroutine implementation by **Russ Cox**:
 
-    func NewCoroutine[In, Out any](f func(in In, yield func(Out) In) Out) (resume func(In) Out) {
-        cin := make(chan In)
-        cout := make(chan Out)
+```go
+func NewCoroutine[In, Out any](f func(in In, yield func(Out) In) Out) (resume func(In) Out) {
+    cin := make(chan In)
+    cout := make(chan Out)
         
-        resume = func(in In) Out {
-            cin <- in
-            return <-cout
-        }
-        
-        yield := func(out Out) In {
-            cout <- out
-            return <-cin
-        }
-        
-        go func() {
-            cout <- f(<-cin, yield)
-        }()
-        
-        return resume
+    resume = func(in In) Out {
+        cin <- in
+        return <-cout
     }
+        
+    yield := func(out Out) In {
+        cout <- out
+        return <-cin
+    }
+        
+    go func() {
+        cout <- f(<-cin, yield)
+    }()
+        
+    return resume
+}
+```
 
 If you, like me, find this difficult to understand or if it doesn’t easily fit into your mental model, let’s break it down and understand how it works **step by step**.
 
@@ -37,28 +42,32 @@ If you, like me, find this difficult to understand or if it doesn’t easily fit
 
 To begin, let’s write a simple test to see how this code behaves:
 
-    func Test_coroutine_simple(t *testing.T) {
-     resume := NewCoroutine(func(in int, yield func(str string) int) string {
-      for {
-       fmt.Println("before yield", in)
-       in = yield("out of yield: " + strconv.Itoa(in))
-       fmt.Println("after yield", in)
-      }
+```go
+func Test_coroutine_simple(t *testing.T) {
+ resume := NewCoroutine(func(in int, yield func(str string) int) string {
+  for {
+   fmt.Println("before yield", in)
+   in = yield("out of yield: " + strconv.Itoa(in))
+   fmt.Println("after yield", in)
+  }
     
-      return "end coro"
-     })
+  return "end coro"
+ })
     
-     fmt.Println("first resume output:", resume(0))
-     fmt.Println("second resume output:", resume(1))
-    }
+ fmt.Println("first resume output:", resume(0))
+ fmt.Println("second resume output:", resume(1))
+}
+```
 
 Here’s the output:
 
-    before yield 0
-    first resume output: out of yield: 0
-    after yield 1
-    before yield 1
-    second resume output: out of yield: 1
+```go
+before yield 0
+first resume output: out of yield: 0
+after yield 1
+before yield 1
+second resume output: out of yield: 1
+```
 
 ## How Does It Work?
 
@@ -102,71 +111,73 @@ Let’s break it down step by step:
 
 Here’s a simple flowchart of what’s happening:
 
-    Start
-                                 |
-                                 V
-                +--------------------------------+
-                | NewCoroutine returns resume()  |  <-- creates the `resume` function
-                +--------------------------------+
-                                 |
-                                 V
-                       +--------------------+
-                       | Call resume(0)     |  <-- first coroutine call: `resume(0)`
-                       +--------------------+
-                                 |
-                                 V
-               +--------------------------------------+
-               | Coroutine starts executing           |  <-- coroutine starts running
-               | Print: "before yield 0"              |  
-               | in = yield("out of yield: 0")        |  <-- calls `yield`
-               +--------------------------------------+
-                                 |
-                                 V
-             +--------------------------------------+
-             | yield sends "out of yield: 0"       |  <-- coroutine sends the result via channel
-             | and waits for input                 |  <-- coroutine is paused, waiting for input
-             +--------------------------------------+
-                                 |
-                                 V
-                      +-------------------------+
-                      | Execution stops          |
-                      | Main prints:             |
-                      | "first resume output:    |
-                      | out of yield: 0"         |  <-- main thread prints the first output
-                      +-------------------------+
-                                 |
-                                 V
-                     +------------------------+
-                     | Call resume(1)         |  <-- second coroutine call: `resume(1)`
-                     +------------------------+
-                                 |
-                                 V
-              +--------------------------------------+
-              | Coroutine resumes                   |  <-- coroutine resumes
-              | yield receives 1                    |  <-- `yield` receives input (1)
-              | Print: "after yield 1"              |  
-              +--------------------------------------+
-                                 |
-                                 V
-              +--------------------------------------+
-              | Next iteration of the loop:          |
-              | Print: "before yield 1"              |  
-              | in = yield("out of yield: 1")        |  <-- calls `yield` again, pauses here
-              +--------------------------------------+
-                                 |
-                                 V
-             +--------------------------------------+
-             | yield sends "out of yield: 1"       |  <-- coroutine sends another result via channel
-             | and waits for input                 |  <-- coroutine is paused again, waiting for input
-             +--------------------------------------+
-                                 |
-                                 V
-                      +-------------------------+
-                      | Execution stops          |
-                      | Main prints:             |
-                      | "second resume output:   |
-                      | out of yield: 1"         |  <-- main thread prints the second output
-                      +-------------------------+
+```go
+Start
+                             |
+                             V
+            +--------------------------------+
+            | NewCoroutine returns resume()  |  <-- creates the `resume` function
+            +--------------------------------+
+                             |
+                             V
+                   +--------------------+
+                   | Call resume(0)     |  <-- first coroutine call: `resume(0)`
+                   +--------------------+
+                             |
+                             V
+           +--------------------------------------+
+           | Coroutine starts executing           |  <-- coroutine starts running
+           | Print: "before yield 0"              |  
+           | in = yield("out of yield: 0")        |  <-- calls `yield`
+           +--------------------------------------+
+                             |
+                             V
+         +--------------------------------------+
+         | yield sends "out of yield: 0"       |  <-- coroutine sends the result via channel
+         | and waits for input                 |  <-- coroutine is paused, waiting for input
+         +--------------------------------------+
+                             |
+                             V
+                  +-------------------------+
+                  | Execution stops          |
+                  | Main prints:             |
+                  | "first resume output:    |
+                  | out of yield: 0"         |  <-- main thread prints the first output
+                  +-------------------------+
+                             |
+                             V
+                 +------------------------+
+                 | Call resume(1)         |  <-- second coroutine call: `resume(1)`
+                 +------------------------+
+                             |
+                             V
+          +--------------------------------------+
+          | Coroutine resumes                   |  <-- coroutine resumes
+          | yield receives 1                    |  <-- `yield` receives input (1)
+          | Print: "after yield 1"              |  
+          +--------------------------------------+
+                             |
+                             V
+          +--------------------------------------+
+          | Next iteration of the loop:          |
+          | Print: "before yield 1"              |  
+          | in = yield("out of yield: 1")        |  <-- calls `yield` again, pauses here
+          +--------------------------------------+
+                             |
+                             V
+         +--------------------------------------+
+         | yield sends "out of yield: 1"       |  <-- coroutine sends another result via channel
+         | and waits for input                 |  <-- coroutine is paused again, waiting for input
+         +--------------------------------------+
+                             |
+                             V
+                  +-------------------------+
+                  | Execution stops          |
+                  | Main prints:             |
+                  | "second resume output:   |
+                  | out of yield: 1"         |  <-- main thread prints the second output
+                  +-------------------------+
+```
 
 Go back to the Test_coroutine_simple code and re-read it with this new understanding. If you have any questions, feel free to ask in the comments below!
 
@@ -176,8 +187,10 @@ Now, let’s explore **how the coroutine mechanism works**.
 
 First, **two channels** are created:
 
-    cin := make(chan In)
-    cout := make(chan Out)
+```go
+cin := make(chan In)
+cout := make(chan Out)
+```
 
 * cin is used to send input values to the coroutine.
 
@@ -185,10 +198,12 @@ First, **two channels** are created:
 
 **resume Function:**
 
-    resume = func(in In) Out {
-       cin <- in
-       return <-cout
-    }
+```go
+resume = func(in In) Out {
+   cin <- in
+   return <-cout
+}
+```
 
 * The resume function sends an input value to the coroutine through cin.
 
@@ -196,9 +211,11 @@ First, **two channels** are created:
 
 **Coroutine:**
 
-    go func() {
-        cout <- f(<-cin, yield)
-    }()
+```go
+go func() {
+    cout <- f(<-cin, yield)
+}()
+```
 
 * A **goroutine** is started, running the coroutine in a separate light thread.
 

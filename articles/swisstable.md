@@ -1,5 +1,8 @@
+---
+title: "SwissTable: Structure and Benchmark"
+author: "Vadim Inshakov"
+---
 
-## SwissTable: Structure and Benchmark
 
 ![](https://cdn-images-1.medium.com/max/2050/1*3KEwpIWMPuklEDi2nxSHwA.png)
 
@@ -24,32 +27,38 @@ Dolt’s SwissTable implementation:
 
 SwissTable does not use traditional buckets (at least in Dolt’s implementation). Instead, it is divided into data and metadata.
 
-    // Map is an open-addressing hash map
-    // based on Abseil's flat_hash_map.
-    type Map[K comparable, V any] struct {
-        ctrl     []metadata
-        groups   []group[K, V]
-        ...
-    }
+```go
+// Map is an open-addressing hash map
+// based on Abseil's flat_hash_map.
+type Map[K comparable, V any] struct {
+    ctrl     []metadata
+    groups   []group[K, V]
+    ...
+}
+```
 
 **Data**
 
 Data is stored in a slice called groups:
 
-    // group is a group of 16 key-value pairs
-    type group[K comparable, V any] struct {
-        keys   [groupSize]K
-        values [groupSize]V
-    }
+```go
+// group is a group of 16 key-value pairs
+type group[K comparable, V any] struct {
+    keys   [groupSize]K
+    values [groupSize]V
+}
+```
 
 **Metadata**
 
 Metadata is represented by bitmasks:
 
-    // metadata is the h2 metadata array for a group.
-    // find operations first probe the controls bytes
-    // to filter candidates before matching keys
-    type metadata [groupSize]int8
+```go
+// metadata is the h2 metadata array for a group.
+// find operations first probe the controls bytes
+// to filter candidates before matching keys
+type metadata [groupSize]int8
+```
 
 ## How SwissTable Works
 
@@ -108,12 +117,14 @@ It’s fairly straightforward. The complexity lies in the highly efficient SIMD 
 
 When the map exceeds its limit, rehashing is triggered. Here’s the code:
 
-    func (m *Map[K, V]) Put(key K, value V) {
-        if m.resident >= m.limit {
-            m.rehash(m.nextSize())
-        }
-        ...
+```go
+func (m *Map[K, V]) Put(key K, value V) {
+    if m.resident >= m.limit {
+        m.rehash(m.nextSize())
     }
+    ...
+}
+```
 
 Rehashing involves:
 
@@ -125,19 +136,21 @@ Rehashing involves:
 
 Here’s a simplified version of the code:
 
-    func (m *Map[K, V]) rehash(n uint32) {
-        ...
-        m.groups = make([]group[K, V], n)
-        m.ctrl = make([]metadata, n)
-        ...
-        for g := range ctrl {
-            for s := range ctrl[g] {
-                c := ctrl[g][s]
-                ...
-                m.Put(groups[g].keys[s], groups[g].values[s])
-            }
+```go
+func (m *Map[K, V]) rehash(n uint32) {
+    ...
+    m.groups = make([]group[K, V], n)
+    m.ctrl = make([]metadata, n)
+    ...
+    for g := range ctrl {
+        for s := range ctrl[g] {
+            c := ctrl[g][s]
+            ...
+            m.Put(groups[g].keys[s], groups[g].values[s])
         }
     }
+}
+```
 
 This blocking and non-concurrent code can become a bottleneck for write-heavy workloads. Each time the map exceeds its limit, significant time is spent on rehashing.
 
@@ -147,51 +160,55 @@ This blocking and non-concurrent code can become a bottleneck for write-heavy wo
 
 I tested write performance with the same initial size for both maps:
 
-    func BenchmarkCompareMaps(b *testing.B) {
-        m := make(map[string]int, 10)
-        b.Run("set std concurrently", func(b *testing.B) {
-            var wg sync.WaitGroup
-            var mu sync.RWMutex
-            for i := 0; i < b.N; i++ {
-                wg.Add(1)
-                i := i
-                go func() {
-                    mu.Lock()
-                    m[fmt.Sprint(i)] = i
-                    mu.Unlock()
-                    wg.Done()
-                }()
-            }
-            wg.Wait()
-        })
+```go
+func BenchmarkCompareMaps(b *testing.B) {
+    m := make(map[string]int, 10)
+    b.Run("set std concurrently", func(b *testing.B) {
+        var wg sync.WaitGroup
+        var mu sync.RWMutex
+        for i := 0; i < b.N; i++ {
+            wg.Add(1)
+            i := i
+            go func() {
+                mu.Lock()
+                m[fmt.Sprint(i)] = i
+                mu.Unlock()
+                wg.Done()
+            }()
+        }
+        wg.Wait()
+    })
     
-       mSwiss := swiss.NewMap[string, int](10)
-       b.Run("set swiss concurrently", func(b *testing.B) {
-            var wg sync.WaitGroup
-            var mu sync.RWMutex
-            for i := 0; i < b.N; i++ {
-                wg.Add(1)
-                i := i
-                go func() {
-                    mu.Lock()
-                    mSwiss.Put(fmt.Sprint(i), i)
-                    mu.Unlock()
-                    wg.Done()
-                }()
-            }
-            wg.Wait()
-        })
-    }
+   mSwiss := swiss.NewMap[string, int](10)
+   b.Run("set swiss concurrently", func(b *testing.B) {
+        var wg sync.WaitGroup
+        var mu sync.RWMutex
+        for i := 0; i < b.N; i++ {
+            wg.Add(1)
+            i := i
+            go func() {
+                mu.Lock()
+                mSwiss.Put(fmt.Sprint(i), i)
+                mu.Unlock()
+                wg.Done()
+            }()
+        }
+        wg.Wait()
+    })
+}
+```
 
 Results:
 
-    go test -run=X -bench=BenchmarkCompareMaps -benchtime=5s  
-    goos: darwin  
-    goarch: arm64  
-    cpu: Apple M2 Pro  
+```go
+go test -run=X -bench=BenchmarkCompareMaps -benchtime=5s  
+goos: darwin  
+goarch: arm64  
+cpu: Apple M2 Pro  
 
-    BenchmarkCompareMaps/set_std_concurrently-10      4212386              1354 ns/op  
-    BenchmarkCompareMaps/set_swiss_concurrently-10    5483253              1649 ns/op
+BenchmarkCompareMaps/set_std_concurrently-10      4212386              1354 ns/op  
+BenchmarkCompareMaps/set_swiss_concurrently-10    5483253              1649 ns/op
+```
 
 Not cool.
 
@@ -199,23 +216,27 @@ Not cool.
 
 Now, let’s compare it with a simple partitioned map — partmap:
 
-    mPart := NewPartitionedMapWithDefaultPartitioner(100, 10)
-    b.Run("set partitioned concurrently", func(b *testing.B) {
-        var wg sync.WaitGroup
-        for i := 0; i < b.N; i++ {
-            wg.Add(1)
-            i := i
-            go func() {
-                mPart.Set(fmt.Sprint(i), i)
-                wg.Done()
-            }()
-        }
-        wg.Wait()
-    })
+```go
+mPart := NewPartitionedMapWithDefaultPartitioner(100, 10)
+b.Run("set partitioned concurrently", func(b *testing.B) {
+    var wg sync.WaitGroup
+    for i := 0; i < b.N; i++ {
+        wg.Add(1)
+        i := i
+        go func() {
+            mPart.Set(fmt.Sprint(i), i)
+            wg.Done()
+        }()
+    }
+    wg.Wait()
+})
+```
 
 Results:
 
-    BenchmarkCompareMaps/set_partitioned_concurrently-10  13336983   493.9 ns/op
+```go
+BenchmarkCompareMaps/set_partitioned_concurrently-10  13336983   493.9 ns/op
+```
 
 The partitioned map performs significantly better for write-heavy workloads. The SwissTable implementation in the Go runtime might bring better performance.
 
