@@ -166,10 +166,10 @@
                 .then(text => {
                     // Remove frontmatter (YAML between --- and ---)
                     const content = text.replace(/^---[\s\S]*?---\n/, '');
-                    
+
                     // Configure marked
                     marked.setOptions({
-                        highlight: function(code, lang) {
+                        highlight: function (code, lang) {
                             const language = highlight.getLanguage(lang) ? lang : 'plaintext';
                             return highlight.highlight(code, { language }).value;
                         },
@@ -177,7 +177,7 @@
                     });
 
                     document.getElementById('content').innerHTML = marked.parse(content);
-                    
+
                     // Extract title from frontmatter for document title
                     const titleMatch = text.match(/^title:\s*"(.*?)"/m);
                     if (titleMatch) {
@@ -197,6 +197,7 @@
                     document.getElementById('content').innerHTML = `<div class="error">
                         <h3>Error loading article</h3>
                         <p>${msg}</p>
+                        <p style="font-size:0.8em; color:#888;">Attempted to fetch: ${fetchUrl}</p>
                     </div>`;
                 });
         } else {
