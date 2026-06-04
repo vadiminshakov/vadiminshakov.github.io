@@ -5,187 +5,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive - Vadim Inshakov</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap"
+        rel="stylesheet">
     <style>
+        :root {
+            --bg: #fafafa;
+            --text: #1a1a1a;
+            --text-muted: #6b6b6b;
+            --accent: #555;
+            --border: #e5e5e5;
+        }
+
         body {
-            font-family: 'Courier New', monospace;
-            background-color: #000;
-            color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 20px;
+            padding: 60px 20px;
+            line-height: 1.6;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 640px;
             margin: 0 auto;
         }
 
+        .page-header {
+            margin-bottom: 64px;
+        }
+
         h1 {
-            text-align: center;
-            margin-bottom: 40px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-weight: 500;
             font-size: 28px;
+            margin: 0 0 8px;
+            color: var(--text);
+            letter-spacing: -0.02em;
         }
 
         .article-list {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
         .article-item {
-            margin-bottom: 20px;
-            padding: 25px;
-            border: 1px solid #333;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            background-color: #0a0a0a;
+            display: block;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border);
+            transition: border-color 0.2s ease;
+        }
+
+        .article-item:last-child {
+            border-bottom: none;
         }
 
         .article-item:hover {
-            background-color: #111;
-            border-color: #7bc7fa;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            border-color: var(--accent);
+        }
+
+        .article-item:hover .article-title {
+            color: var(--accent);
         }
 
         .article-title {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 12px;
-            color: #7bc7fa;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.5;
+            color: var(--text);
+            transition: color 0.2s ease;
         }
 
         .article-subtitle {
-            font-size: 15px;
-            color: #aaa;
-            line-height: 1.6;
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-top: 4px;
         }
 
         a {
             text-decoration: none;
             color: inherit;
-            display: block;
         }
 
         .back-home {
-            display: block;
-            margin-bottom: 30px;
-            color: #7bc7fa;
-            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 48px;
+            color: var(--text-muted);
             font-size: 14px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            transition: color 0.2s ease;
         }
 
         .back-home:hover {
-            text-decoration: underline;
+            color: var(--text);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .article-title {
+                font-size: 14px;
+            }
+
+            .article-subtitle {
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <a href="index.html" class="back-home">← Back to Home</a>
-        <h1>Archive</h1>
+        <a href="index.html" class="back-home">← Home</a>
+        <div class="page-header">
+            <h1>Archive</h1>
+        </div>
         <ul class="article-list">
             <li>
-                <a href="article.html?post=repository_registry">
-                    <div class="article-item">
-                        <div class="article-title">Design: Repository Registry and Transactions at the Service Level
-                        </div>
-                        <div class="article-subtitle">A deep dive into managing transactions across service and
-                            repository layers using a registry pattern.</div>
-                    </div>
+                <a href="article.html?post=go_runtime_thread_management" class="article-item">
+                    <div class="article-title">Deep Dive into Go Runtime: Advanced Thread Management Explained</div>
+                    <div class="article-subtitle">Unveiling the hidden aspects of thread management in Go.</div>
                 </a>
             </li>
             <li>
-                <a href="article.html?post=go_runtime_thread_management">
-                    <div class="article-item">
-                        <div class="article-title">Deep Dive into Go Runtime: Advanced Thread Management Explained</div>
-                        <div class="article-subtitle">Unveiling the hidden aspects of thread management in Go.</div>
-                    </div>
+                <a href="article.html?post=generic_vs_interfaces" class="article-item">
+                    <div class="article-title">Golang design: Generics vs Interfaces, How It Really Works Under the Hood</div>
+                    <div class="article-subtitle">A long story in simple words about how the internals of Go work when using generics and interfaces.</div>
                 </a>
             </li>
             <li>
-                <a href="article.html?post=generic_vs_interfaces">
-                    <div class="article-item">
-                        <div class="article-title">Golang design: Generics vs Interfaces, How It Really Works Under the
-                            Hood</div>
-                        <div class="article-subtitle">A long story in simple words about how the internals of Go work
-                            when using generics and interfaces.</div>
-                    </div>
+                <a href="article.html?post=coroutine" class="article-item">
+                    <div class="article-title">Golang design: Mechanics of Coroutines</div>
+                    <div class="article-subtitle">A step-by-step breakdown of how coroutines work in Go, explained simply.</div>
                 </a>
             </li>
             <li>
-                <a href="article.html?post=coroutine">
-                    <div class="article-item">
-                        <div class="article-title">Golang design: Mechanics of Coroutines</div>
-                        <div class="article-subtitle">A step-by-step breakdown of how coroutines work in Go, explained
-                            simply.</div>
-                    </div>
+                <a href="article.html?post=pointers_and_cpu" class="article-item">
+                    <div class="article-title">Go: when pointers hide the benefits of CPU caching</div>
+                    <div class="article-subtitle">Beware of premature optimizations; understanding how pointers affect CPU caching.</div>
                 </a>
             </li>
             <li>
-                <a href="article.html?post=pointers_and_cpu">
-                    <div class="article-item">
-                        <div class="article-title">Go: when pointers hide the benefits of CPU caching</div>
-                        <div class="article-subtitle">Beware of premature optimizations; understanding how pointers
-                            affect CPU caching.</div>
-                    </div>
+                <a href="article.html?post=clean_ifelse" class="article-item">
+                    <div class="article-title">Clean Code Fundamentals: Eliminating if/else hell using functions</div>
+                    <div class="article-subtitle">Techniques to simplify complex conditional logic and improve code readability.</div>
                 </a>
             </li>
             <li>
-                <a href="article.html?post=clean_ifelse">
-                    <div class="article-item">
-                        <div class="article-title">Clean Code Fundamentals: Eliminating if/else hell using functions
-                        </div>
-                        <div class="article-subtitle">Techniques to simplify complex conditional logic and improve code
-                            readability.</div>
-                    </div>
+                <a href="article.html?post=partmap_en" class="article-item">
+                    <div class="article-title">Writing a Partitioned Cache Using Go Map (x3 Faster than the Standard Map)</div>
+                    <div class="article-subtitle">Optimizing concurrent map access in Go using partitioning.</div>
                 </a>
             </li>
             <li>
-                <a href="article.html?post=partmap_en">
-                    <div class="article-item">
-                        <div class="article-title">Writing a Partitioned Cache Using Go Map (x3 Faster than the Standard
-                            Map)</div>
-                        <div class="article-subtitle">Optimizing concurrent map access in Go using partitioning.</div>
-                    </div>
+                <a href="article.html?post=partmap_ru" class="article-item">
+                    <div class="article-title">Пишем партиционированный кеш на go map (x3 быстрее стандартной map)</div>
+                    <div class="article-subtitle">Optimizing concurrent map access in Go using partitioning (Russian version).</div>
                 </a>
             </li>
             <li>
-                <a href="article.html?post=partmap_ru">
-                    <div class="article-item">
-                        <div class="article-title">Пишем партиционированный кеш на go map (x3 быстрее стандартной map)
-                        </div>
-                        <div class="article-subtitle">Optimizing concurrent map access in Go using partitioning (Russian
-                            version).</div>
-                    </div>
+                <a href="article.html?post=gc_basics" class="article-item">
+                    <div class="article-title">Basics of Golang GC Explained: Tri-color Mark and Sweep and Stop the World</div>
+                    <div class="article-subtitle">Understanding the mechanics of Go's garbage collector.</div>
                 </a>
             </li>
             <li>
-                <a href="article.html?post=gc_basics">
-                    <div class="article-item">
-                        <div class="article-title">Basics of Golang GC Explained: Tri-color Mark and Sweep and Stop the
-                            World</div>
-                        <div class="article-subtitle">Understanding the mechanics of Go's garbage collector.</div>
-                    </div>
+                <a href="article.html?post=swisstable" class="article-item">
+                    <div class="article-title">SwissTable: Structure and Benchmark</div>
+                    <div class="article-subtitle">Exploring the SwissTable hash map implementation and its performance.</div>
                 </a>
             </li>
             <li>
-                <a href="article.html?post=swisstable">
-                    <div class="article-item">
-                        <div class="article-title">SwissTable: Structure and Benchmark</div>
-                        <div class="article-subtitle">Exploring the SwissTable hash map implementation and its
-                            performance.</div>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="article.html?post=fabex">
-                    <div class="article-item">
-                        <div class="article-title">FabEx tutorial: an introduction to the right Hyperledger Fabric
-                            explorer</div>
-                        <div class="article-subtitle">A guide to using FabEx for Hyperledger Fabric blockchain
-                            exploration.</div>
-                    </div>
+                <a href="article.html?post=fabex" class="article-item">
+                    <div class="article-title">FabEx tutorial: an introduction to the right Hyperledger Fabric explorer</div>
+                    <div class="article-subtitle">A guide to using FabEx for Hyperledger Fabric blockchain exploration.</div>
                 </a>
             </li>
         </ul>
