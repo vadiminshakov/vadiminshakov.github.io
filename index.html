@@ -19,6 +19,7 @@
             --text-muted: #6b6b6b;
             --accent: #555;
             --border: #e5e5e5;
+            --contribution-accent: #8069b3;
         }
 
         body {
@@ -71,6 +72,18 @@
         .page-desc {
             color: var(--text-muted);
             margin: 0 0 16px;
+        }
+
+        .intro a {
+            color: var(--contribution-accent);
+            font-weight: 500;
+            text-decoration: underline;
+            text-decoration-color: color-mix(in srgb, var(--contribution-accent) 35%, transparent);
+            text-underline-offset: 3px;
+        }
+
+        .intro a:hover {
+            text-decoration-color: var(--contribution-accent);
         }
 
         .social-links {
@@ -155,6 +168,34 @@
             font-family: 'JetBrains Mono', 'Courier New', monospace;
             font-size: 15px;
             font-weight: 500;
+        }
+
+        .contribution-details {
+            margin-top: 12px;
+            padding: 10px 12px;
+            color: var(--text-muted);
+            background: #fff;
+            border-left: 3px solid var(--contribution-accent);
+            border-radius: 0 6px 6px 0;
+        }
+
+        .contributions .contribution-details a {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            text-decoration: underline;
+            text-decoration-color: var(--border);
+            text-underline-offset: 3px;
+        }
+
+        .contributions .contribution-details a:hover {
+            color: var(--contribution-accent);
+            text-decoration-color: var(--contribution-accent);
+        }
+
+        .contribution-mark {
+            font-size: 14px;
         }
 
         .company-links {
@@ -275,7 +316,8 @@
             </div>
         </div>
 
-        <p>A technology enthusiast, interested in crafting high-quality code and building robust systems</p>
+        <p class="intro">A technology enthusiast, interested in crafting high-quality code and building robust systems.
+        <a href="https://github.com/charmbracelet/crush" target="_blank">Crush</a> contributor.</p>
 
         <h2>Projects</h2>
         <ul class="section-list projects">
@@ -342,13 +384,54 @@
 
         <h2>Contributions</h2>
         <ul class="section-list contributions">
-            <li><a href="https://github.com/charmbracelet/crush" target="_blank">crush</a> - the glamourous AI
-                coding agent for your favourite terminal</li>
-            <li><a href="https://github.com/max-messenger/max-bot-api-client-go"
-                    target="_blank">max-bot-api-client-go</a> - Go client for Max Messenger Bot API</li>
-            <li><a href="https://github.com/Kuper-Tech/protokaf" target="_blank">protokaf</a> - Protocol Buffers for
-                Kafka</li>
-            <li><a href="https://github.com/tidwall/wal" target="_blank">wal</a> - Write-Ahead Logging for Go</li>
+            <li>
+                <a href="https://github.com/charmbracelet/crush" target="_blank">crush</a> - the glamourous AI
+                coding agent for your favourite terminal
+                <div class="item-desc contribution-details">
+                    Co-authored the <span class="contribution-mark" aria-hidden="true">🔥</span> <a
+                        href="https://github.com/charmbracelet/crush/pull/3069"
+                        target="_blank">question tool with inline editor</a> — released in <a
+                        href="https://github.com/charmbracelet/crush/releases/tag/v0.85.0"
+                        target="_blank">v0.85.0</a><br>
+                    Created <span class="contribution-mark" aria-hidden="true">🔥</span> <a
+                        href="https://github.com/charmbracelet/crush/pull/2822" target="_blank">Plan Mode</a> — released
+                    in <a href="https://github.com/charmbracelet/crush/releases/tag/v0.95.0" target="_blank">v0.95.0</a>
+                </div>
+            </li>
+            <li>
+                <a href="https://github.com/max-messenger/max-bot-api-client-go"
+                    target="_blank">max-bot-api-client-go</a> - Go client for Max Messenger Bot API
+                <div class="item-desc contribution-details">
+                    Added <a href="https://github.com/max-messenger/max-bot-api-client-go/pull/1"
+                        target="_blank">reliable server interaction</a>, fixed <a
+                        href="https://github.com/max-messenger/max-bot-api-client-go/pull/3"
+                        target="_blank">examples</a>, and <a
+                        href="https://github.com/max-messenger/max-bot-api-client-go/pull/11"
+                        target="_blank">refactored the core with context support and typed errors</a> — released in <a
+                        href="https://github.com/max-messenger/max-bot-api-client-go/releases/tag/v1.0.1"
+                        target="_blank">v1.0.1</a><br>
+                    Improved <a href="https://github.com/max-messenger/max-bot-api-client-go/pull/22"
+                        target="_blank">message error handling</a> — released in <a
+                        href="https://github.com/max-messenger/max-bot-api-client-go/releases/tag/v1.0.2"
+                        target="_blank">v1.0.2</a>
+                </div>
+            </li>
+            <li>
+                <a href="https://github.com/Kuper-Tech/protokaf" target="_blank">protokaf</a> - Protocol Buffers for
+                Kafka
+                <div class="item-desc contribution-details">
+                    Added <a href="https://github.com/Kuper-Tech/protokaf/pull/10" target="_blank">consumer offset
+                        support</a>
+                </div>
+            </li>
+            <li>
+                <a href="https://github.com/tidwall/wal" target="_blank">wal</a> - Write-Ahead Logging for Go
+                <div class="item-desc contribution-details">
+                    Fixed <a href="https://github.com/tidwall/wal/pull/25" target="_blank">truncate error handling</a> —
+                    released in <a href="https://github.com/tidwall/wal/releases/tag/v1.1.8"
+                        target="_blank">v1.1.8</a>
+                </div>
+            </li>
         </ul>
 
         <h2>Worked for</h2>
