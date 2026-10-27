@@ -19,7 +19,6 @@
             --text-muted: #6b6b6b;
             --accent: #555;
             --border: #e5e5e5;
-            --contribution-accent: #8069b3;
         }
 
         body {
@@ -61,8 +60,24 @@
         }
 
         a {
-            text-decoration: none;
+            text-decoration: underline;
+            text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
+            text-underline-offset: 3px;
             color: inherit;
+            transition: color 0.2s ease, text-decoration-color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--accent);
+            text-decoration-color: currentColor;
+        }
+
+        a:focus-visible {
+            color: var(--accent);
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+            border-radius: 3px;
+            text-decoration-color: currentColor;
         }
 
         .page-header {
@@ -75,29 +90,25 @@
         }
 
         .intro a {
-            color: var(--contribution-accent);
+            color: var(--accent);
             font-weight: 500;
             text-decoration: underline;
-            text-decoration-color: color-mix(in srgb, var(--contribution-accent) 35%, transparent);
+            text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
             text-underline-offset: 3px;
         }
 
         .intro a:hover {
-            text-decoration-color: var(--contribution-accent);
+            text-decoration-color: var(--accent);
         }
 
         .social-links {
-            position: fixed;
-            left: 32px;
-            top: 50%;
-            transform: translateY(-50%);
             display: flex;
-            flex-direction: column;
-            gap: 20px;
-            z-index: 10;
+            flex-wrap: wrap;
+            gap: 8px 24px;
         }
 
         .social-links a {
+            padding: 4px 0;
             color: var(--text-muted);
             font-size: 14px;
             font-weight: 500;
@@ -105,8 +116,9 @@
             transition: color 0.2s ease;
         }
 
-        .social-links a:hover {
-            color: var(--text);
+        .social-links a:hover,
+        .social-links a:focus-visible {
+            color: var(--accent);
         }
 
         .section-list {
@@ -119,19 +131,10 @@
             display: block;
             padding: 16px 0;
             border-bottom: 1px solid var(--border);
-            transition: border-color 0.2s ease;
         }
 
         .section-list li:last-child {
             border-bottom: none;
-        }
-
-        .section-list li:hover {
-            border-color: var(--accent);
-        }
-
-        .section-list li:hover a {
-            color: var(--accent);
         }
 
         .section-list a {
@@ -140,6 +143,43 @@
             font-weight: 500;
             color: var(--text);
             transition: color 0.2s ease;
+        }
+
+        .section-list a:hover,
+        .section-list a:focus-visible {
+            color: var(--accent);
+        }
+
+        .articles li {
+            padding: 0;
+        }
+
+        .articles a {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            text-decoration: none;
+        }
+
+        .article-title {
+            text-decoration: underline;
+            text-decoration-color: var(--border);
+            text-underline-offset: 3px;
+        }
+
+        .articles a:hover .article-title,
+        .articles a:focus-visible .article-title {
+            text-decoration-color: currentColor;
+        }
+
+        .article-arrow {
+            flex-shrink: 0;
+            color: var(--text-muted);
         }
 
         .item-desc {
@@ -175,7 +215,7 @@
             padding: 10px 12px;
             color: var(--text-muted);
             background: #fff;
-            border-left: 3px solid var(--contribution-accent);
+            border-left: 3px solid var(--accent);
             border-radius: 0 6px 6px 0;
         }
 
@@ -189,9 +229,10 @@
             text-underline-offset: 3px;
         }
 
-        .contributions .contribution-details a:hover {
-            color: var(--contribution-accent);
-            text-decoration-color: var(--contribution-accent);
+        .contributions .contribution-details a:hover,
+        .contributions .contribution-details a:focus-visible {
+            color: var(--accent);
+            text-decoration-color: var(--accent);
         }
 
         .contribution-mark {
@@ -204,7 +245,7 @@
             margin: 0;
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 8px 24px;
         }
 
         .company-links li {
@@ -213,33 +254,24 @@
 
         .company-links a {
             display: inline-block;
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
             font-size: 14px;
             font-weight: 500;
-            color: #1a73e8;
-            background-color: #fff;
-            padding: 8px 16px;
-            border: 1px solid #1a73e8;
-            border-radius: 6px;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            color: var(--text-muted);
+            padding: 6px 0;
         }
 
-        .company-links a:hover {
-            background-color: #1a73e8;
-            color: #fff;
+        .company-links a:hover,
+        .company-links a:focus-visible {
+            color: var(--accent);
         }
 
         .archive-link {
             display: inline-block;
             margin-top: 16px;
-            color: var(--text-muted);
+            color: var(--accent);
             font-size: 14px;
             font-weight: 500;
             transition: color 0.2s ease;
-        }
-
-        .archive-link:hover {
-            color: var(--text);
         }
 
         @media (max-width: 768px) {
@@ -253,30 +285,6 @@
 
             h2 {
                 font-size: 18px;
-            }
-
-            .social-links {
-                position: static;
-                transform: none;
-                flex-direction: row;
-                gap: 24px;
-                left: auto;
-                top: auto;
-                margin-top: 16px;
-            }
-
-            .company-links {
-                gap: 10px;
-            }
-
-            .company-links li {
-                flex: 0 0 calc(50% - 5px);
-                box-sizing: border-box;
-            }
-
-            .company-links a {
-                display: block;
-                text-align: center;
             }
         }
 
@@ -293,12 +301,9 @@
                 gap: 16px;
             }
 
-            .section-list a {
+            .projects a,
+            .contributions li a {
                 font-size: 14px;
-            }
-
-            .company-links li {
-                flex: 0 0 100%;
             }
         }
     </style>
@@ -309,11 +314,11 @@
         <div class="page-header">
             <h1>Vadim Inshakov</h1>
             <p class="page-desc">Go Software developer</p>
-            <div class="social-links">
+            <nav class="social-links" aria-label="Social links">
                 <a href="https://github.com/vadiminshakov" target="_blank">GitHub</a>
                 <a href="https://medium.com/@vadiminshakov" target="_blank">Medium</a>
                 <a href="https://t.me/goffmananderving" target="_blank">Telegram</a>
-            </div>
+            </nav>
         </div>
 
         <p class="intro">A technology enthusiast, interested in crafting high-quality code and building robust systems.
@@ -348,40 +353,6 @@
             </li>
         </ul>
 
-        <h2>Publications</h2>
-        <ul class="section-list articles">
-            <li><a href="https://medium.com/@vadiminshakov/swisstable-structure-and-benchmark-c6bed23fd8e1"
-                    target="_blank">SwissTable: Structure and Benchmark</a></li>
-            <li><a href="https://vadiminshakov.medium.com/golang-desing-coroutines-76da4f6f5245"
-                    target="_blank">Golang design: Mechanics of Coroutines</a></li>
-            <li><a href="https://medium.com/stackademic/basics-of-golang-gc-explained-tri-color-mark-and-sweep-and-stop-the-world-cc832f99164c"
-                    target="_blank">Basics of Golang GC Explained: Tri-color Mark and Sweep and Stop the World</a></li>
-            <li><a href="https://blog.stackademic.com/deep-dive-into-go-runtime-advanced-thread-management-explained-fd5c97b4daa4"
-                    target="_blank">Deep Dive into Go Runtime: Advanced Thread Management Explained</a></li>
-            <li><a href="https://medium.com/stackademic/golang-design-generics-vs-interfaces-how-it-really-works-under-the-hood-c1e5057a7ae6"
-                    target="_blank">Golang design: Generics vs Interfaces, How it Really works under the hood</a></li>
-            <li><a href="https://medium.com/stackademic/go-when-pointers-reduce-the-impact-of-cpu-caching-1e290fc30077"
-                    target="_blank">Go: when pointers hide the benefits of CPU caching</a></li>
-            <li><a href="https://medium.com/stackademic/clean-code-fundamentals-eliminating-if-else-hell-using-functions-a3ed32d69732"
-                    target="_blank">Clean Code Fundamentals: Eliminating if/else hell using functions</a></li>
-            <li><a href="https://medium.com/stackademic/writing-a-partitioned-cache-using-go-map-x3-faster-than-the-standard-map-dbfe704fe4bf"
-                    target="_blank">Writing a Partitioned Cache Using Go Map (x3 Faster than the Standard Map)</a></li>
-            <li><a href="https://medium.com/@vadiminshakov/fabex-tutorial-an-introduction-to-the-right-hyperledger-fabric-explorer-cd9ee1848cd9"
-                    target="_blank">FabEx tutorial: an introduction to the right Hyperledger Fabric explorer</a></li>
-            <li><a href="https://habr.com/ru/articles/496872/" target="_blank">Новая программная модель Hyperledger
-                    Fabric: Go SDK</a></li>
-            <li><a href="https://habr.com/ru/articles/494880/" target="_blank">Новая программная модель чейнкода
-                    Hyperledger Fabric</a></li>
-            <li><a href="https://habr.com/ru/articles/489002/" target="_blank">Распределенный реестр для колесных
-                    пар: опыт с Hyperledger Fabric</a></li>
-            <li><a href="https://habr.com/ru/articles/501422/" target="_blank">FabEx — block explorer для
-                    Hyperledger Fabric</a>
-                <div class="archive-link-wrap">
-                    <a class="archive-link" href="archive.html">archive</a>
-                </div>
-            </li>
-        </ul>
-
         <h2>Contributions</h2>
         <ul class="section-list contributions">
             <li>
@@ -390,12 +361,12 @@
                 <div class="item-desc contribution-details">
                     Co-authored the <span class="contribution-mark" aria-hidden="true">🔥</span> <a
                         href="https://github.com/charmbracelet/crush/pull/3069"
-                        target="_blank">question tool with inline editor</a> — released in <a
+                        target="_blank">question tool with inline editor</a> (<a
                         href="https://github.com/charmbracelet/crush/releases/tag/v0.85.0"
-                        target="_blank">v0.85.0</a><br>
+                        target="_blank">v0.85.0</a>)<br>
                     Created <span class="contribution-mark" aria-hidden="true">🔥</span> <a
-                        href="https://github.com/charmbracelet/crush/pull/2822" target="_blank">Plan Mode</a> — released
-                    in <a href="https://github.com/charmbracelet/crush/releases/tag/v0.95.0" target="_blank">v0.95.0</a>
+                        href="https://github.com/charmbracelet/crush/pull/2822" target="_blank">Plan Mode</a>
+                    (<a href="https://github.com/charmbracelet/crush/releases/tag/v0.95.0" target="_blank">v0.95.0</a>)
                 </div>
             </li>
             <li>
@@ -407,13 +378,13 @@
                         href="https://github.com/max-messenger/max-bot-api-client-go/pull/3"
                         target="_blank">examples</a>, and <a
                         href="https://github.com/max-messenger/max-bot-api-client-go/pull/11"
-                        target="_blank">refactored the core with context support and typed errors</a> — released in <a
+                        target="_blank">refactored the core with context support and typed errors</a> (<a
                         href="https://github.com/max-messenger/max-bot-api-client-go/releases/tag/v1.0.1"
-                        target="_blank">v1.0.1</a><br>
+                        target="_blank">v1.0.1</a>)<br>
                     Improved <a href="https://github.com/max-messenger/max-bot-api-client-go/pull/22"
-                        target="_blank">message error handling</a> — released in <a
+                        target="_blank">message error handling</a> (<a
                         href="https://github.com/max-messenger/max-bot-api-client-go/releases/tag/v1.0.2"
-                        target="_blank">v1.0.2</a>
+                        target="_blank">v1.0.2</a>)
                 </div>
             </li>
             <li>
@@ -427,12 +398,44 @@
             <li>
                 <a href="https://github.com/tidwall/wal" target="_blank">wal</a> - Write-Ahead Logging for Go
                 <div class="item-desc contribution-details">
-                    Fixed <a href="https://github.com/tidwall/wal/pull/25" target="_blank">truncate error handling</a> —
-                    released in <a href="https://github.com/tidwall/wal/releases/tag/v1.1.8"
-                        target="_blank">v1.1.8</a>
+                    Fixed <a href="https://github.com/tidwall/wal/pull/25" target="_blank">truncate error handling</a>
+                    (<a href="https://github.com/tidwall/wal/releases/tag/v1.1.8" target="_blank">v1.1.8</a>)
                 </div>
             </li>
         </ul>
+
+        <h2>Publications</h2>
+        <ul class="section-list articles">
+            <li>
+                <a href="https://medium.com/@vadiminshakov/swisstable-structure-and-benchmark-c6bed23fd8e1"
+                    target="_blank" rel="noopener noreferrer">
+                    <span class="article-title">SwissTable: Structure and Benchmark</span>
+                    <span class="article-arrow" aria-hidden="true">↗</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://vadiminshakov.medium.com/golang-desing-coroutines-76da4f6f5245"
+                    target="_blank" rel="noopener noreferrer">
+                    <span class="article-title">Golang design: Mechanics of Coroutines</span>
+                    <span class="article-arrow" aria-hidden="true">↗</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://medium.com/stackademic/basics-of-golang-gc-explained-tri-color-mark-and-sweep-and-stop-the-world-cc832f99164c"
+                    target="_blank" rel="noopener noreferrer">
+                    <span class="article-title">Basics of Golang GC Explained: Tri-color Mark and Sweep and Stop the World</span>
+                    <span class="article-arrow" aria-hidden="true">↗</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://blog.stackademic.com/deep-dive-into-go-runtime-advanced-thread-management-explained-fd5c97b4daa4"
+                    target="_blank" rel="noopener noreferrer">
+                    <span class="article-title">Deep Dive into Go Runtime: Advanced Thread Management Explained</span>
+                    <span class="article-arrow" aria-hidden="true">↗</span>
+                </a>
+            </li>
+        </ul>
+        <a class="archive-link" href="archive.html">All articles →</a>
 
         <h2>Worked for</h2>
         <ul class="company-links">

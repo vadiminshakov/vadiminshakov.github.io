@@ -81,6 +81,12 @@
             color: var(--text);
         }
 
+        a:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+            border-radius: 3px;
+        }
+
         p {
             margin: 0 0 1.2em;
         }
@@ -173,8 +179,9 @@
             transition: color 0.2s ease;
         }
 
-        .back-link:hover {
-            color: var(--text);
+        .back-link:hover,
+        .back-link:focus-visible {
+            color: var(--accent);
         }
 
         .article-meta {
