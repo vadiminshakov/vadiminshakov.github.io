@@ -1,0 +1,27 @@
+archive.html
+  s_13cc61581d0a50::t_94736a8493ca87 63,67-68,70-71,75-76,95-100,111-113,199-222
+index.html
+  s_13cc61581d0a50::t_51540fe07a678f 63-65,67-80,93,96,101,106-107,111,121,148-184,218,232-235,248,259-260,265,271,304-305,317,321
+  s_13cc61581d0a50::t_ec21f27fa28297 364,366,368-369,381,383,385,387,401-402
+  s_13cc61581d0a50::t_825576471f1ad5 407-438
+  s_13cc61581d0a50::t_505ee34790b7ab 119-120,263-264
+  s_13cc61581d0a50::t_30f45bf6095c65 439
+article.html
+  s_13cc61581d0a50::t_94736a8493ca87 84-89,182-184
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c03baa7d2f663c68f252dac87c33b7429844df0f",
+  "prompts": {},
+  "sessions": {
+    "s_13cc61581d0a50": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a15fec-640e-7a53-80ed-fcdafdb83ea9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Vadim Inshakov <vadiminshakov@gmail.com>"
+    }
+  }
+}
